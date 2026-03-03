@@ -4,7 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 
-root kamus_abjad[26]; // array kamus berisi 26 elemen
+root kamus_abjad[26]; // array kamus berisi 26 elemen 0-25
 
 // === FUNGSI INISIALISASI ARRAY ===
 void inisialisasi()
