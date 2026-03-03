@@ -6,7 +6,6 @@
 typedef struct node *nodeptr;
 
 // ==STRUKTUR LINKLIST==
-
 // Deklarasi node next
 typedef struct node
 {
