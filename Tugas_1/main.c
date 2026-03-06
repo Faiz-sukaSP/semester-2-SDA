@@ -92,5 +92,5 @@ int main()
     // 5. Fungsi tambahan untuk membersihkan memori agar tidak terjadi kebocoran memori
     hapus_semua();
 
-    return EXIT_SUCCESS;
+    return EXIT_SUCCESS; // program berakhir dengan sukses
 }
