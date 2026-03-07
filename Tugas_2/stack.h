@@ -17,23 +17,25 @@ typedef struct stacknode *stack_nodeptr;
 // DEKLARASI STRUCK STACKNODE
 typedef struct stacknode
 {
-    int elemen;
+    int element;
     stack_nodeptr next; // pointer yang menghubungkan ke alamat seterusnya
 } stacknode;
 
-// DEKLARASI STRUCK STACK
-typedef struct stack
+// DEKLARASI STRUCK STACKLL
+typedef struct stackLL
 {
     stack_nodeptr top; // mendeklarasikan top yang bertipe stack_nodeptr"
     unsigned size;     // mendeklarasikan size yang bertipe unsigned sehingga ukuran selalu dicatat dengan bilangan bulat positif
-} stack;
+} stackLL;
 
+// DEKLARASI STRUCK STACK ARRAY
 typedef struct
 {
-    char data[100];
+    char data[100]; // mendeklarasikan array data berukuran 100
     int top;
 } stack_array;
 
 // MENDEKLARASIKAN FUNGSI-FUNGSI YANG AKAN SAYA GUNAKAN
 void inisialisasi_awal();
+
 #endif
