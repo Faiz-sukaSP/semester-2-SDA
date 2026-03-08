@@ -17,7 +17,7 @@ typedef struct stacknode *stack_nodeptr;
 // DEKLARASI STRUCK STACKNODE
 typedef struct stacknode
 {
-    int element;
+    int elemen;
     stack_nodeptr next; // pointer yang menghubungkan ke alamat seterusnya
 } stacknode;
 
@@ -35,7 +35,37 @@ typedef struct
     int top;
 } stack_array;
 
-// MENDEKLARASIKAN FUNGSI-FUNGSI YANG AKAN SAYA GUNAKAN
-void inisialisasi_awal();
+// ======= DEKLARASI FUNGSI =======
+
+// Fungsi stack array
+void init_array(stack_array *sa);
+int isempty_array(stack_array *sa);
+void push_array_char(stack_array *sa, char data);
+char pop_array_char(stack_array *sa);
+char peek_array_char(stack_array *sa);
+
+// Fungsi stack array postfix
+void push_array_postfix(stack_array *sa, int data);
+int pop_array_postfix(stack_array *sa);
+
+// Fungsi stack Linked List
+void initLL(stackLL *ps);
+int isemptyLL(stackLL *ps);
+void pushLL(stackLL *ps, int element);
+int popLL(stackLL *ps);
+int peekLL(stackLL *ps);
+
+// Fungsi cek kurung "()" "{}" "[]"
+int cek_kurung(char expresi[]);
+
+// Fungsi prioritas operasi
+int priority(char operation);
+
+// Fungsi mengubah infix menjadi postfix
+void infix_to_postfix(char infix[], char postfix[]);
+
+// Fungsi evaluasi postfix
+int ev_post_arr(char postfix[]);
+int ev_postLL(char postfix[]);
 
 #endif
