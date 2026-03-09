@@ -10,21 +10,21 @@
 */
 
 // menginisialisasi stack array awal
-void init_array(stack_array *sa)
+void init_array_char(stack_array *sa)
 {
     sa->top = -1; // top bernilai -1/kosong
 }
 
 // fungsi mengecek apakah array kosong atau tidak
-int isempty_array(stack_array *sa)
+int isempty_array_char(stack_array *sa)
 {
-    return sa->top = -1; // jika array kosong maka return 1
+    return sa->top == -1; // jika array kosong maka return 1
 }
 
 // fungsi push data array yang bertipe char kedalam stack (untuk poin pertama pada tugas)
 void push_array_char(stack_array *sa, char data)
 {
-    if (sa->top = MAX - 1) // fungsi if untuk mengecek apakah array sudah penuh atau tidak
+    if (sa->top == MAX - 1) // fungsi if untuk mengecek apakah array sudah penuh atau tidak
     {
         printf("Array sudah penuh, anda hanya dapat menginput 99 karakter!!"); // output apabila array sudah penuh
     }
@@ -41,7 +41,7 @@ char pop_array_char(stack_array *sa)
 }
 
 // fungsi untuk melihat nilai array teratas
-char peek_array(stack_array *sa)
+char peek_array_char(stack_array *sa)
 {
     return sa->data[sa->top]; // tidak ada perubahan hanya melihat nilai teratas
 }
@@ -49,7 +49,7 @@ char peek_array(stack_array *sa)
 // fungsi push data bertipe integer kedalam stack
 void push_array_postfix(stack_array *sa, int data)
 {
-    if (sa->top = MAX - 1) // fungsi if untuk mengecek apakah array sudah penuh atau tidak
+    if (sa->top == MAX - 1) // fungsi if untuk mengecek apakah array sudah penuh atau tidak
     {
         printf("Array sudah penuh, anda hanya dapat menginput 99 karakter!!"); // output apabila array sudah penuh
     }
@@ -130,23 +130,23 @@ int cek_kurung(char expresi[])
     {
         char c = expresi[i];                  // c menyimpan nilai setiap string
         if (c == '(' || c == '[' || c == '{') // cek apakah c sesuai dengan kondisi if
-            push_array(&sa, c);               // jika sesuai maka di push kedalam stack
+            push_array_char(&sa, c);          // jika sesuai maka di push kedalam stack
 
         else if (c == ')' || c == ']' || c == '}')
         {
-            if (isempty_array(&sa)) // jika kurung tutup tidak ada dan tidak sesuai maka program berhenti
-                return 0;           // program langsung berhenti
+            if (isempty_array_char(&sa)) // jika kurung tutup tidak ada dan tidak sesuai maka program berhenti
+                return 0;                // program langsung berhenti
 
             char top = pop_array_char(&sa); // top menyimpan nilai pop_array_char
 
             // cek pasangan kurung apakah sesuai atau tidak
             if ((c == ')' && top != '(') ||
                 (c == ']' && top != '[') ||
-                (c == ' }' && top != '{'))
+                (c == '}' && top != '{'))
                 return 0;
         }
     }
-    return isempty_array(&sa); // jika stack sudah kosong maka akan return 1
+    return isempty_array_char(&sa); // jika stack sudah kosong maka akan return 1
 }
 
 /*
@@ -157,18 +157,19 @@ int cek_kurung(char expresi[])
 
 int priority(char operation)
 {
-    if ((operation == '+' || operation == '-'))
-        return 1;
-    if ((operation == '*' || operation == '/'))
-        return 2;
+    if ((operation == '+' || operation == '-')) // cek apakah operator adalah penjumlahan atau pengurangan
+        return 1;                               // maka jika iya dikembalikan nilai 1;
+
+    if ((operation == '*' || operation == '/')) // cek apakah operator adalah kali atau bagi
+        return 2;                               // jika iya maka kembalikan nilai 2
 
     return 0;
 }
 
 /*
-  ========================
-       INFIX -> POSTFIX
-  ========================
+  =======================
+     INFIX -> POSTFIX
+  =======================
 */
 
 void infix_to_postfix(char infix[], char postfix[])
@@ -192,22 +193,22 @@ void infix_to_postfix(char infix[], char postfix[])
 
         else if (c == ')') //// jika postfix selain bilangan alfanumerik dan ")"
         {
-            while (!isempty_stack(&ps) && peek_LL(&ps) != '(') // looping selama stack belum kosong dan stack bukan "c"
-                postfix[j++] = popLL(&ps);                     // keluarkan operator dari stack ke postfix
+            while (!isemptyLL(&ps) && peekLL(&ps) != '(') // looping selama stack belum kosong dan stack bukan "c"
+                postfix[j++] = popLL(&ps);                // keluarkan operator dari stack ke postfix
 
             popLL(&ps); // membuang kurung "("
         }
 
         else // jika operator (+,-,*,/)
         {
-            while (!isempty_stack(&ps) && operation(peek_LL(&ps)) >= operation(c)) // loop berjalan apabila stack tidak kosong dan apakah salah satu operasi lebih besar daripada operasi 1 nya
-                postfix[j++] = popLL(&ps);                                         // maka operator di stack dipindahkan ke postfix
+            while (!isemptyLL(&ps) && priority(peekLL(&ps)) >= priority(c)) // loop berjalan apabila stack tidak kosong dan apakah salah satu operasi lebih besar daripada operasi 1 nya
+                postfix[j++] = popLL(&ps);                                  // maka operator di stack dipindahkan ke postfix
 
             pushLL(&ps, c); // operator baru dimasukkan kedalam stack
         }
         i++; // index infix bertambah untuk membaca karakter berikutnya
     }
-    while (!isempty_stack(&ps))    // loop apakah masih ada operator di stack
+    while (!isemptyLL(&ps))        // loop apakah masih ada operator di stack
         postfix[j++] = popLL(&ps); // jika ada maka pindahkan ke postfix
 
     postfix[j] = '\0'; // menambahkan null terminator
@@ -272,28 +273,29 @@ int ev_postLL(char postfix[]) // mengembalikan nilai integer dengan parameter be
     {
         char c = postfix[i]; // char c menerima nilai postfix[i]
 
-        if (isdigit(c))                       // cek apakah c adalah angka
-            push_array_postfix(&ps, c - '0'); /*jika iya maka karakter angka harus diubah terlebih dulu menjadi integer
+        if (isdigit(c))           // cek apakah c adalah angka
+            pushLL(&ps, c - '0'); /*jika iya maka karakter angka harus diubah terlebih dulu menjadi integer
                                              dengan pengurangan nilai ASCII dan dimasukkan kedalam stack */
+
         // jika "c" bukan angka
         else
         {
-            int a = pop_array_postfix(&ps); // a mengambil elemen pertama dari stack
-            int b = pop_array_postfix(&ps); // b menggambil elemen dibawah elemen pertama dari stack
+            int a = popLL(&ps); // a mengambil elemen pertama dari stack
+            int b = popLL(&ps); // b menggambil elemen dibawah elemen pertama dari stack
 
             switch (c) // menentukan operator apa yang harus digunakan
             {
             case '+':
-                push_array_postfix(&ps, b + a); // jika penjumlahan maka elemen ditambah dan dimasukkan kedalam stack
+                pushLL(&ps, b + a); // jika penjumlahan maka elemen ditambah dan dimasukkan kedalam stack
                 break;
             case '-':
-                push_array_postfix(&ps, b - a); // jika penjumlahan maka elemen dikurangi dan dimasukkan kedalam stack
+                pushLL(&ps, b - a); // jika penjumlahan maka elemen dikurangi dan dimasukkan kedalam stack
                 break;
             case '*':
-                push_array_postfix(&ps, b * a); // jika penjumlahan maka elemen dikalikan dan dimasukkan kedalam stack
+                pushLL(&ps, b * a); // jika penjumlahan maka elemen dikalikan dan dimasukkan kedalam stack
                 break;
             case '/':
-                push_array_postfix(&ps, b / a); // jika penjumlahan maka elemen ditbagi dan dimasukkan kedalam stack
+                pushLL(&ps, b / a); // jika penjumlahan maka elemen ditbagi dan dimasukkan kedalam stack
                 break;
 
             default:
@@ -301,5 +303,5 @@ int ev_postLL(char postfix[]) // mengembalikan nilai integer dengan parameter be
             }
         }
     }
-    return pop_array_postfix(&ps); // mengambil nilai terakhir dari stack dan mengembalikan nilainya sebagai hasil fungsi
+    return popLL(&ps); // mengambil nilai terakhir dari stack dan mengembalikan nilainya sebagai hasil fungsi
 }
