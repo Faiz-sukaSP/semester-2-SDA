@@ -1,9 +1,79 @@
+NAMA: FAIZ ASRA
+NPM: 250810701100062
+KELAS: B
+
+DESKRIPSI PROYEK
+----------------
+->Program ini dibuat sesuai dengan arahan dan instruksi yang diberikan pada Tugas 2. Program ini berbasis bahasa C 
+dan dirancang untuk mengimplementasikan struktur data Stack menggunakan dua pendekatan yaitu Array dan Linked List. 
+Program memiliki tiga fitur utama: 
+(1) validasi ekspresi tanda kurung seimbang menggunakan Stack Array,
+(2) konversi ekspresi aritmatika infix ke postfix menggunakan Stack Linked List, dan 
+(3) evaluasi nilai akhir ekspresi postfix menggunakan Stack Array dan Linked List.
 
 
+STRUKTUR DATA
+-------------
+1. Stack Array       : Implementasi stack menggunakan array statis berukuran MAX (100).
+                       Digunakan pada fitur cek kurung seimbang dan evaluasi postfix.
+
+2. Stack Linked List : Implementasi stack menggunakan node dinamis (malloc/free).
+                       Digunakan pada fitur konversi infix ke postfix dan evaluasi postfix.
+
+STRUKTUR FILE
+-------------
+- main.c    : Logika utama program, menu interaktif, dan user interface.
+- stack.c   : Implementasi seluruh fungsi stack (array & linked list), cek kurung,
+              konversi infix-postfix, dan evaluasi postfix.
+- stack.h   : Header file berisi definisi struktur data dan prototipe fungsi.
+
+CARA KOMPILASI DAN MENJALANKAN PROGRAM INI
+------------------------------------------
+Gunakan compiler GCC/CLANG untuk mengompilasi program:
+
+    =============================================
+   | clang -g -Wall -o program main.c stack.c   |
+    =============================================
+
+Setelah berhasil dikompilasi, jalankan program dengan:
+
+    ===========
+   | ./program |
+    ===========
+
+UNTUK MELAKUKAN PENGETESAN MEMORY (MEMORY LEAK CHECK)
+------------------------------------------------------
+->Program ini telah dioptimalkan untuk manajemen memori dinamis. Untuk
+memastikan tidak ada kebocoran memori (memory leak), pengetesan dilakukan
+menggunakan perintah:
+
+    =============================
+   | leaks --atExit -- ./program |
+    =============================
+
+saya menggunakan tool bawaan macOS untuk melakukan pengetesan kebocoran memori.
 
 
+ ==============================
+| ALUR SAAT PROGRAM DIJALANKAN |
+ ==============================
 
+->Apabila dijalankan, maka hasilnya sebagai berikut:
 
+*Menu 1 -> user memasukkan ekspresi kurung -> program menampilkan "Seimbang" atau "Tidak Seimbang".
+
+*Menu 2 -> user memasukkan ekspresi infix (contoh: "1+2*3/2+4") -> program menampilkan
+           hasil konversi postfix (contoh: "123*2/+4+") dan menyimpannya otomatis untuk menu 3.
+
+*Menu 3 -> program langsung menggunakan postfix dari menu 2 -> menampilkan hasil
+           evaluasi menggunakan Stack Array dan Stack Linked List (contoh: hasil = 8).
+           Jika menu 2 belum dijalankan, program meminta user menjalankan menu 2 terlebih dahulu.
+
+*Menu 4 -> program berhenti dan menampilkan "Program Selesai, Membersihkan Memori...."
+
+ ========
+| Output |
+ ========
 
 faizasra@MacBook-Pro-faiz Tugas_2 % leaks --atExit -- ./program
 

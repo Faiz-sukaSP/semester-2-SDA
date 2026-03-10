@@ -18,7 +18,7 @@ void init_array_char(stack_array *sa)
 // fungsi mengecek apakah array kosong atau tidak
 int isempty_array_char(stack_array *sa)
 {
-    return sa->top == -1; // jika array kosong maka return 1
+    return sa->top == -1; // mengembalikan 1 jika stack kosong dan 0 jika terisi
 }
 
 // fungsi push data array yang bertipe char kedalam stack (untuk poin pertama pada tugas)
@@ -59,7 +59,7 @@ void push_array_postfix(stack_array *sa, int data)
     }
 }
 
-// fungsi untuk menampilkan array yang bertipe integerpada s
+// fungsi untuk menampilkan array yang bertipe integer pada s
 int pop_array_postfix(stack_array *sa)
 {
     return sa->data[sa->top--];
@@ -213,7 +213,7 @@ void infix_to_postfix(char infix[], char postfix[])
 
     postfix[j] = '\0'; // menambahkan null terminator
 
-    void freeLL(stackLL * ps); // memanggil fungsi membersihkan memori
+    freeLL(&ps); // memanggil fungsi membersihkan memori
 }
 
 /*
@@ -246,13 +246,13 @@ int ev_post_arr(char postfix[]) // mengembalikan nilai integer dengan parameter 
                 push_array_char(&sa, b + a); // jika penjumlahan maka elemen ditambah dan dimasukkan kedalam stack
                 break;
             case '-':
-                push_array_char(&sa, b - a); // jika penjumlahan maka elemen dikurangi dan dimasukkan kedalam stack
+                push_array_char(&sa, b - a); // jika pengurangan maka elemen dikurangi dan dimasukkan kedalam stack
                 break;
             case '*':
-                push_array_char(&sa, b * a); // jika penjumlahan maka elemen dikalikan dan dimasukkan kedalam stack
+                push_array_char(&sa, b * a); // jika perkalian maka elemen dikalikan dan dimasukkan kedalam stack
                 break;
             case '/':
-                push_array_char(&sa, b / a); // jika penjumlahan maka elemen ditbagi dan dimasukkan kedalam stack
+                push_array_char(&sa, b / a); // jika pembagian maka elemen dibagi dan dimasukkan kedalam stack
                 break;
             }
         }
@@ -291,13 +291,13 @@ int ev_postLL(char postfix[]) // mengembalikan nilai integer dengan parameter be
                 pushLL(&ps, b + a); // jika penjumlahan maka elemen ditambah dan dimasukkan kedalam stack
                 break;
             case '-':
-                pushLL(&ps, b - a); // jika penjumlahan maka elemen dikurangi dan dimasukkan kedalam stack
+                pushLL(&ps, b - a); // jika pengurangan maka elemen dikurangi dan dimasukkan kedalam stack
                 break;
             case '*':
-                pushLL(&ps, b * a); // jika penjumlahan maka elemen dikalikan dan dimasukkan kedalam stack
+                pushLL(&ps, b * a); // jika perkalian maka elemen dikalikan dan dimasukkan kedalam stack
                 break;
             case '/':
-                pushLL(&ps, b / a); // jika penjumlahan maka elemen ditbagi dan dimasukkan kedalam stack
+                pushLL(&ps, b / a); // jika pembagian maka elemen dibagi dan dimasukkan kedalam stack
                 break;
 
             default:
@@ -305,9 +305,10 @@ int ev_postLL(char postfix[]) // mengembalikan nilai integer dengan parameter be
             }
         }
     }
-    return popLL(&ps); // mengambil nilai terakhir dari stack dan mengembalikan nilainya sebagai hasil fungsi
 
-    void freeLL(stackLL * ps); // memanggil fungsi membersihkan memori
+    int hasil = popLL(&ps); // hasil menyimpan nilai dari popLL
+    freeLL(&ps);            // membersihkan memori
+    return hasil;           // kembalikan nilai hasil
 }
 
 // fungsi untuk membersihkan semua node yang tersisa di stack LL

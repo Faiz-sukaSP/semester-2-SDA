@@ -5,7 +5,7 @@
 int main()
 {
     int pilihan;
-    char hasil_postfix[MAX]; // variabel untuk menyimpan nilai postfix dari pilihan ke 2
+    char hasil_postfix[MAX] = ""; // variabel untuk menyimpan nilai postfix dari pilihan ke 2 ("") pencegahan apabila user langsung memilih menu 3
 
     printf("\n===== Program Stack =====\n");
     printf("1. Cek Kurung Seimbang (Arr)\n");
@@ -80,10 +80,6 @@ int main()
             printf("Hasil Postfix(LL): %d\n", hasil_LL);
             break;
         }
-        case 4:
-            printf("Program Selesai, Membersihkan Memori....\n");
-            break;
-
         default:
             printf("Input yang Anda Masukkan Tidak Sesuai(1-4)!!");
             break;
