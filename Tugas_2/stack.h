@@ -2,12 +2,12 @@
 #ifndef stack_h
 #define stack_h
 
-#define MAX 100
+#define MAX 100 // Memberi ukuran nilai max
 
 // DEKLARASI STUCK ARRAY
 typedef struct
 {
-    char data[MAX];
+    char data[MAX]; // deklarasi char data yang seukuran dengan MAX
     int top;
 } stack_array;
 
@@ -27,13 +27,6 @@ typedef struct stackLL
     stack_nodeptr top; // mendeklarasikan top yang bertipe stack_nodeptr"
     unsigned size;     // mendeklarasikan size yang bertipe unsigned sehingga ukuran selalu dicatat dengan bilangan bulat positif
 } stackLL;
-
-// DEKLARASI STRUCK STACK ARRAY
-typedef struct
-{
-    char data[100]; // mendeklarasikan array data berukuran 100
-    int top;
-} stack_array;
 
 // ======= DEKLARASI FUNGSI =======
 
@@ -67,5 +60,8 @@ void infix_to_postfix(char infix[], char postfix[]);
 // Fungsi evaluasi postfix
 int ev_post_arr(char postfix[]);
 int ev_postLL(char postfix[]);
+
+// Fungsi untuk mencegah kebocoran memori
+void freeLL(stackLL *ps);
 
 #endif

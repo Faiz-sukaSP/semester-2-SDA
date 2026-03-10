@@ -1,229 +1,113 @@
 #include "stack.h"
 #include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
+#include <string.h>
 
-/* =========================
-   STACK ARRAY
-========================= */
+int main()
+{
+    int pilihan;
 
-void initArray(stack_array *s){
-    s->top = -1;
-}
+    printf("============================================\n");
+    printf("         PROGRAM STACK - STRUKTUR DATA      \n");
+    printf("============================================\n");
+    printf("  1. Cek Kurung Seimbang  (Stack Array)     \n");
+    printf("  2. Infix ke Postfix     (Stack Linked List)\n");
+    printf("  3. Evaluasi Postfix     (Array & LL)       \n");
+    printf("  0. Keluar                                  \n");
+    printf("============================================\n");
 
-int emptyArray(stack_array *s){
-    return s->top == -1;
-}
+    do {
+        printf("\nPilih menu [0-3]: ");
+        scanf("%d", &pilihan);
+        getchar(); // bersihkan newline
 
-void pushArray(stack_array *s,int x){
-    s->data[++s->top] = x;
-}
+        switch (pilihan)
+        {
+        /*
+         * ============================================
+         *  POIN 1 — CEK KURUNG SEIMBANG (Stack Array)
+         * ============================================
+         */
+        case 1:
+        {
+            char ekspresi[MAX];
+            printf("\n--- CEK KURUNG SEIMBANG ---\n");
+            printf("Masukkan ekspresi kurung: ");
+            fgets(ekspresi, MAX, stdin);
+            ekspresi[strcspn(ekspresi, "\n")] = '\0'; // hapus newline
 
-int popArray(stack_array *s){
-    return s->data[s->top--];
-}
-
-char popArrayChar(stack_array *s){
-    return s->data[s->top--];
-}
-
-/* =========================
-   STACK LINKED LIST
-========================= */
-
-void initStack(stack *ps){
-    ps->top = NULL;
-    ps->size = 0;
-}
-
-int emptyStack(stack *ps){
-    return ps->top == NULL;
-}
-
-void push(stack *ps, int elemen){
-
-    stack_nodeptr newNode = malloc(sizeof(stacknode));
-
-    newNode->elemen = element;
-    newNode->next = ps->top;
-
-    ps->top = newNode;
-    ps->size++;
-}
-
-int pop(stack *ps){
-
-    stack_nodeptr temp = ps->top;
-    int val = temp->elemen;
-
-    ps->top = temp->next;
-
-    free(temp);
-    ps->size--;
-
-    return val;
-}
-
-int peek(stack *ps){
-    return ps->top->elemen;
-}
-
-/* =========================
-   CEK KURUNG SEIMBANG
-========================= */
-
-int cekKurung(char expr[]){
-
-    stack_array s;
-    initArray(&s);
-
-    for(int i=0; expr[i]; i++){
-
-        char c = expr[i];
-
-        if(c=='(' || c=='[' || c=='{')
-            pushArray(&s,c);
-
-        else if(c==')' || c==']' || c=='}'){
-
-            if(emptyArray(&s))
-                return 0;
-
-            char top = popArrayChar(&s);
-
-            if((c==')' && top!='(') ||
-               (c==']' && top!='[') ||
-               (c=='}' && top!='{'))
-                return 0;
+            if (cek_kurung(ekspresi))
+                printf("Hasil : Ekspresi \"%s\" SEIMBANG ✓\n", ekspresi);
+            else
+                printf("Hasil : Ekspresi \"%s\" TIDAK SEIMBANG ✗\n", ekspresi);
+            break;
         }
-    }
 
-    return emptyArray(&s);
-}
+        /*
+         * ============================================
+         *  POIN 2 — INFIX KE POSTFIX (Stack LinkedList)
+         * ============================================
+         */
+        case 2:
+        {
+            char infix[MAX], postfix[MAX];
+            printf("\n--- KONVERSI INFIX KE POSTFIX ---\n");
+            printf("Masukkan ekspresi infix  : ");
+            fgets(infix, MAX, stdin);
+            infix[strcspn(infix, "\n")] = '\0';
 
-/* =========================
-   PRIORITAS OPERATOR
-========================= */
+            // Validasi kurung seimbang dulu
+            if (!cek_kurung(infix))
+            {
+                printf("Error: Ekspresi infix memiliki kurung yang tidak seimbang!\n");
+                break;
+            }
 
-int precedence(char op){
+            infix_to_postfix(infix, postfix);
+            printf("Ekspresi infix   : %s\n", infix);
+            printf("Ekspresi postfix : %s\n", postfix);
+            break;
+        }
 
-    if(op=='+' || op=='-') return 1;
-    if(op=='*' || op=='/') return 2;
+        /*
+         * ============================================
+         *  POIN 3 — EVALUASI POSTFIX (Array & LL)
+         * ============================================
+         */
+        case 3:
+        {
+            char infix[MAX], postfix[MAX];
+            printf("\n--- EVALUASI EKSPRESI ---\n");
+            printf("Masukkan ekspresi infix: ");
+            fgets(infix, MAX, stdin);
+            infix[strcspn(infix, "\n")] = '\0';
+
+            if (!cek_kurung(infix))
+            {
+                printf("Error: Kurung tidak seimbang!\n");
+                break;
+            }
+
+            infix_to_postfix(infix, postfix);
+            printf("Ekspresi infix   : %s\n", infix);
+            printf("Ekspresi postfix : %s\n", postfix);
+
+            int hasil_arr = ev_post_arr(postfix);
+            int hasil_ll  = ev_postLL(postfix);
+
+            printf("Hasil (Array)    : %d\n", hasil_arr);
+            printf("Hasil (LinkedList): %d\n", hasil_ll);
+            break;
+        }
+
+        case 0:
+            printf("\nTerima kasih! Program selesai.\n");
+            break;
+
+        default:
+            printf("Pilihan tidak valid! Masukkan angka 0-3.\n");
+        }
+
+    } while (pilihan != 0);
 
     return 0;
-}
-
-/* =========================
-   INFIX → POSTFIX
-========================= */
-
-void infixToPostfix(char infix[], char postfix[]){
-
-    stack s;
-    initStack(&s);
-
-    int i=0,j=0;
-
-    while(infix[i]){
-
-        char c = infix[i];
-
-        if(isalnum(c))
-            postfix[j++] = c;
-
-        else if(c=='(')
-            push(&s,c);
-
-        else if(c==')'){
-
-            while(!emptyStack(&s) && peek(&s)!='(')
-                postfix[j++] = pop(&s);
-
-            pop(&s);
-        }
-
-        else{
-
-            while(!emptyStack(&s) &&
-                  precedence(peek(&s)) >= precedence(c))
-                postfix[j++] = pop(&s);
-
-            push(&s,c);
-        }
-
-        i++;
-    }
-
-    while(!emptyStack(&s))
-        postfix[j++] = pop(&s);
-
-    postfix[j]='\0';
-}
-
-/* =========================
-   EVALUASI POSTFIX ARRAY
-========================= */
-
-int evaluatePostfixArray(char postfix[]){
-
-    stack_array s;
-    initArray(&s);
-
-    for(int i=0; postfix[i]; i++){
-
-        char c = postfix[i];
-
-        if(isdigit(c))
-            pushArray(&s, c-'0');
-
-        else{
-
-            int b = popArray(&s);
-            int a = popArray(&s);
-
-            switch(c){
-
-                case '+': pushArray(&s,a+b); break;
-                case '-': pushArray(&s,a-b); break;
-                case '*': pushArray(&s,a*b); break;
-                case '/': pushArray(&s,a/b); break;
-            }
-        }
-    }
-
-    return popArray(&s);
-}
-
-/* =========================
-   EVALUASI POSTFIX LINKED LIST
-========================= */
-
-int evaluatePostfixLL(char postfix[]){
-
-    stack s;
-    initStack(&s);
-
-    for(int i=0; postfix[i]; i++){
-
-        char c = postfix[i];
-
-        if(isdigit(c))
-            push(&s, c-'0');
-
-        else{
-
-            int b = pop(&s);
-            int a = pop(&s);
-
-            switch(c){
-
-                case '+': push(&s,a+b); break;
-                case '-': push(&s,a-b); break;
-                case '*': push(&s,a*b); break;
-                case '/': push(&s,a/b); break;
-            }
-        }
-    }
-
-    return pop(&s);
 }

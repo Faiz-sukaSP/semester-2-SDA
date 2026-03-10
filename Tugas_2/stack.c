@@ -122,8 +122,8 @@ int peekLL(stackLL *ps)
 
 int cek_kurung(char expresi[])
 {
-    stack_array sa;  // membuat stack array yang diberi nama "sa"
-    init_array(&sa); // mengambil alamat memori init_array(salah satu fungsi di awal program)
+    stack_array sa;       // membuat stack array yang diberi nama "sa"
+    init_array_char(&sa); // mengambil alamat memori init_array(salah satu fungsi di awal program)
 
     // loop untuk membaca setiap karakter hingga akhir string
     for (int i = 0; expresi[i]; i++)
@@ -174,8 +174,8 @@ int priority(char operation)
 
 void infix_to_postfix(char infix[], char postfix[])
 {
-    stackLL ps;      // ps menyimpan variabel yang digunakan untuk stackLL
-    init_stack(&ps); // memanggi fungsi inisialisasi yang telah dibuat sebelumnya
+    stackLL ps;  // ps menyimpan variabel yang digunakan untuk stackLL
+    initLL(&ps); // memanggi fungsi inisialisasi yang telah dibuat sebelumnya
 
     // variabel sebagai index array
     int i = 0, j = 0;
@@ -188,8 +188,8 @@ void infix_to_postfix(char infix[], char postfix[])
         if (isalnum(c))       // cek apakah sting ke-c adalah alfanumerik atau bukan
             postfix[j++] = c; // jika iya maka postfif awal menampung nilai c
 
-        else if (c == '(')              // jika postfix selain bilangan alfanumerik dan "("
-            push_array_postfix(&ps, c); // nilai c akan di push kedalam stack
+        else if (c == '(')  // jika postfix selain bilangan alfanumerik dan "("
+            pushLL(&ps, c); // nilai c akan di push kedalam stack
 
         else if (c == ')') //// jika postfix selain bilangan alfanumerik dan ")"
         {
@@ -212,6 +212,8 @@ void infix_to_postfix(char infix[], char postfix[])
         postfix[j++] = popLL(&ps); // jika ada maka pindahkan ke postfix
 
     postfix[j] = '\0'; // menambahkan null terminator
+
+    void freeLL(stackLL * ps); // memanggil fungsi membersihkan memori
 }
 
 /*
@@ -222,8 +224,8 @@ void infix_to_postfix(char infix[], char postfix[])
 
 int ev_post_arr(char postfix[]) // mengembalikan nilai integer dengan parameter berupa char string[]
 {
-    stack_array sa;  // membuat stack array yang diberi nama "sa"
-    init_array(&sa); // mengambil alamat memori init_array(salah satu fungsi di awal program)
+    stack_array sa;       // membuat stack array yang diberi nama "sa"
+    init_array_char(&sa); // mengambil alamat memori init_array(salah satu fungsi di awal program)
 
     for (int i = 0; postfix[i]; i++) // loop untuk membaca postfix hingga ketemu '/0'
     {
@@ -304,4 +306,13 @@ int ev_postLL(char postfix[]) // mengembalikan nilai integer dengan parameter be
         }
     }
     return popLL(&ps); // mengambil nilai terakhir dari stack dan mengembalikan nilainya sebagai hasil fungsi
+
+    void freeLL(stackLL * ps); // memanggil fungsi membersihkan memori
 }
+
+// fungsi untuk membersihkan semua node yang tersisa di stack LL
+void freeLL(stackLL *ps)
+{
+    while (!isemptyLL(ps))
+        popLL(ps); // popLL sudah memanggil free(temp) di dalamnya
+};
